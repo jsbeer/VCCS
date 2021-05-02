@@ -1,0 +1,51 @@
+// Jonathan Strand-Beer
+// Volume Colored Candlesticks
+// Written in Pine for TradingView.com
+
+// This will show volume in color in the candlestick
+// Volume colors are from smallest volume to largest volume
+// Gain in price: light blue, solid blue, light green, solid green, black green
+// Loss in price: light orange, solid orange, light red, solid red, black red
+
+
+study("Jonathan's Volume Based Coloured Bars", title="VCB", overlay=true)
+length=input(21, "length", minval=1)
+avrg=sma(volume,length)
+
+vold1 = volume > avrg*2.0 and close<open
+vold2 = volume >= avrg*1.5 and volume<=avrg*2.0 and close<open
+vold3 = volume >= avrg*1.0 and volume<=avrg*1.5 and close<open
+vold4 = volume >= avrg*.5 and volume<=avrg*1 and close<open
+vold5 = volume < avrg *.5 and close<open
+
+volu1 = volume > avrg*2.0 and close>open
+volu2 = volume >= avrg*1.5 and volume<=avrg*2.0 and close>open
+volu3 = volume >= avrg*1.0 and volume<=avrg*1.5 and close>open
+volu4 = volume >= avrg*.5 and volume<=avrg*1 and close>open
+volu5 = volume < avrg*.5 and close>open
+
+
+cold1=#800000
+cold2=#FF0000
+cold3=#F8c1c1
+cold4=orange
+cold5=#Fed488
+
+
+colu1=#006400
+colu2=#38b01e
+colu3=lime
+colu4=#1e81b0
+colu5=#7FFFD4
+
+
+color = vold1 ? cold1 : vold2 ? cold2 : vold3 ? cold3 : vold4 ? cold4 : vold5 ? cold5 :  volu1 ? colu1 : volu2 ? colu2 : volu3 ? colu3 :  volu4 ? colu4 :  volu5 ? colu5 : na
+
+barcolor(color)
+
+
+quickSMA = sma(close, 30)
+quickEMA = ema(close,9)
+// Plot EMAs on the chart
+plot(series=quickEMA, color=black, linewidth=2)
+plot(series=quickSMA, color=black, linewidth=1)
